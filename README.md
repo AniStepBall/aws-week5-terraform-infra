@@ -61,34 +61,51 @@ In contrast, manual console configuration:
 ## How to Run
 
 ### Prerequisites
-- Terraform installed (`terraform -version`)
-- AWS CLI configured (`aws sts get-caller-identity`)
+
+Ensure the following are installed and configured:
+
+- Terraform  
+  ```bash
+  terraform -version
+  
+AWS CLI (authenticated)
+  ```bash
+aws sts get-caller-identity
 
 ### Deploy
 # 1. Clone the repo
+ ```bash
 git clone https://github.com/AniStepBall/aws-week5-terraform-infra.git
 cd aws-week5-terraform-infra
 
-# 2. Create your tfvars (never committed — see .gitignore)
-cp terraform.tfvars.example terraform.tfvars
-Edit terraform.tfvars with your values
+terraform apply -auto-approve
+Used for automation scenarios (CI/CD), but avoided here to enforce the review step
 
-# 3. Initialise
+# 2. Configure the variable  - Create your tfvars (never committed — see .gitignore)
+ ```bash
+cp terraform.tfvars.example terraform.tfvars
+Edit terraform.tfvars with your values (never commit this file).
+
+# 3. Initialise the terraform
+ ```bash
 terraform init
 
 # 4. Preview changes
+ ```bash
 terraform plan
 
-# 5. Deploy
+# 5. Apply Configurations
+```bash
 terraform apply
-```
 
-After apply completes, the EC2 public IP is printed automatically:
+After apply completes, the EC2 public IP is printed automatically
 
 Outputs:
-> `instance_public_ip = "xx.xx.xx.xx"`
+After deployment completes, Terraform will output:
 
-Open that IP in your browser to confirm the nginx page loads.
+instance_public_ip = "xx.xx.xx.xx"
+
+Open this IP in your browser to confirm the nginx page is running.
 
 ### Destroy
 ```bash
@@ -98,12 +115,12 @@ All resources are automatically removed in the correct dependency order.
 
 ---
 ## Validation/Testing
-To confirm correct deployment:
+To verify successful deployment:
 
-Verified VPC, subnets, and routing in AWS Console
-Confirmed EC2 instance launched successfully
-Accessed nginx page via public IP
-Validated repeatability by re-running terraform apply
+Confirm VPC, subnets, and route tables in AWS Console
+Verify EC2 instance is running
+Access nginx via the public IP
+Re-run terraform apply to confirm idempotency
 
 
 ---
