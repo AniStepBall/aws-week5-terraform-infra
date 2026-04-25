@@ -71,7 +71,7 @@ cd aws-week5-terraform-infra
 
 # 2. Create your tfvars (never committed — see .gitignore)
 cp terraform.tfvars.example terraform.tfvars
-# Edit terraform.tfvars with your values
+Edit terraform.tfvars with your values
 
 # 3. Initialise
 terraform init
