@@ -128,39 +128,30 @@ Validated repeatability by re-running terraform apply
 ---
 ## Design Decisions and Tradeoffs
 No NAT Gateway
-
 NAT Gateway was intentionally omitted to control cost.
 
-Tradeoff:
+### Tradeoff:
 
-Lower cost
 Private subnets cannot access the internet
+Easier Access
+Less secure than private subnet + ALB design
+---
+### Cost Considerations
+Private subnet egress via NAT Gateway is omitted in this version to control cost.
+In production, a NAT Gateway would be added in each public subnet, with a corresponding private route table pointing 0.0.0.0/0 to it.
 
-Production approach
+EC2 (t3.micro) — low-cost compute
+No NAT Gateway — major cost saving
+EC2 (t3.micro) — low-cost compute
+No NAT Gateway — major cost saving**
+---
+## Production approach
 
 Add NAT Gateway per AZ for high availability
 
 ---
 ## Public EC2 Deployment
-
 EC2 instance deployed in a public subnet for simplicity.
-
-Tradeoff:
-
-Easier access
-Less secure than private subnet + ALB design
-Cost Considerations
-EC2 (t3.micro) — low-cost compute
-No NAT Gateway — major cost saving*
----
-
-
-## Cost Consideration 
-Private subnet egress via NAT Gateway omitted in this version to control cost.
-In production, a NAT Gateway in each public subnet would be added with a corresponding private route table pointing 0.0.0.0/0 to it.
-
-EC2 (t3.micro) — low-cost compute
-No NAT Gateway — major cost saving
 
 ---
 ## Screenshots
