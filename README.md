@@ -1,11 +1,26 @@
 # AWS Week 5 - Infrasturture as Code with Terraform
 
+---
+## Overview
+
+This project provisions AWS infrastructure using Terraform, replacing manual console-based setup with reproducible, version-controlled infrastructure.
+
+The goal was to move from “click-based deployment” to a declarative infrastructure that can be created, modified, and destroyed consistently.
+
+---
 ## Objective
-The aim of this week is to provide a complete AWS networking and computing using Terraform to remove the use of manual clicking for reproducible infrastructure
+- Define AWS infrastructure using Terraform  
+- Eliminate manual configuration in the AWS Console  
+- Enable repeatable and version-controlled deployments  
+- Understand infrastructure lifecycle (provision → validate → destroy)
 
 ---
 
 ## Architecture
+This system provisions a basic web infrastructure inside a custom VPC.
+
+Traffic flow:
+User → EC2 (public subnet) → nginx  
 
 ![Architecture Diagram](./diagram/week5-architecture.png)
 
@@ -29,13 +44,20 @@ The aim of this week is to provide a complete AWS networking and computing using
 
 ## Why Terraform Instead of the Console
 
-- Is repeatable every time compared to AWS Console manual which can lead to error
-- Has version controlled with Git compared to AWS no history of change
-- The written code is the documentation vs the Console diffculty with sharing with a group/team
-- Has `terraform destroy` which removes everything. Removing in the AWS console is very tedious an can lead to errors
+Terraform improves infrastructure management in several ways:
+
+• **Reproducibility** — infrastructure can be created consistently across environments  
+• **Version control** — changes tracked through Git  
+• **Collaboration** — configurations are shareable and reviewable  
+• **Automation** — full lifecycle management (create, update, destroy)  
+
+In contrast, manual console configuration:
+- is error-prone  
+- is difficult to track  
+- does not scale well for teams  
+
 
 ---
-
 ## How to Run
 
 ### Prerequisites
@@ -43,7 +65,6 @@ The aim of this week is to provide a complete AWS networking and computing using
 - AWS CLI configured (`aws sts get-caller-identity`)
 
 ### Deploy
-```bash
 # 1. Clone the repo
 git clone https://github.com/AniStepBall/aws-week5-terraform-infra.git
 cd aws-week5-terraform-infra
@@ -73,10 +94,19 @@ Open that IP in your browser to confirm the nginx page loads.
 ```bash
 terraform destroy
 ```
-All resources are removed in the correct dependency order automatically.
+All resources are automatically removed in the correct dependency order.
 
 ---
+## Validation/Testing
+To confirm correct deployment:
 
+Verified VPC, subnets, and routing in AWS Console
+Confirmed EC2 instance launched successfully
+Accessed nginx page via public IP
+Validated repeatability by re-running terraform apply
+
+
+---
 ## Inputs
 
 | Variable | Description | Default |
@@ -94,14 +124,45 @@ All resources are removed in the correct dependency order automatically.
 |---|---|
 | `instance_public_ip` | Public IP of the EC2 instance |
 
+
+---
+## Design Decisions and Tradeoffs
+No NAT Gateway
+
+NAT Gateway was intentionally omitted to control cost.
+
+Tradeoff:
+
+Lower cost
+Private subnets cannot access the internet
+
+Production approach
+
+Add NAT Gateway per AZ for high availability
+
+---
+## Public EC2 Deployment
+
+EC2 instance deployed in a public subnet for simplicity.
+
+Tradeoff:
+
+Easier access
+Less secure than private subnet + ALB design
+Cost Considerations
+EC2 (t3.micro) — low-cost compute
+No NAT Gateway — major cost saving*
 ---
 
-## Cost Notes
+
+## Cost Consideration 
 Private subnet egress via NAT Gateway omitted in this version to control cost.
 In production, a NAT Gateway in each public subnet would be added with a corresponding private route table pointing 0.0.0.0/0 to it.
 
----
+EC2 (t3.micro) — low-cost compute
+No NAT Gateway — major cost saving
 
+---
 ## Screenshots
 
 ### terraform apply output
@@ -133,3 +194,9 @@ aws-week5-terraform-infra/
 ├── screenshots/
 └── README.md
 ```
+
+## What I Learned
+Infrastructure can be defined and version-controlled like code
+Terraform enables consistent and repeatable deployments
+Design decisions involve tradeoffs between cost, security, and complexity
+Infrastructure lifecycle management is as important as deployment
