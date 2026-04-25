@@ -127,31 +127,53 @@ Validated repeatability by re-running terraform apply
 
 ---
 ## Design Decisions and Tradeoffs
-No NAT Gateway
-NAT Gateway was intentionally omitted to control cost.
 
-### Tradeoff:
+### No NAT Gateway
 
-Private subnets cannot access the internet
-Easier Access
-Less secure than private subnet + ALB design
----
-### Cost Considerations
-Private subnet egress via NAT Gateway is omitted in this version to control cost.
-In production, a NAT Gateway would be added in each public subnet, with a corresponding private route table pointing 0.0.0.0/0 to it.
+A NAT Gateway was intentionally omitted in this implementation to control cost and keep the architecture simple during development.
 
-EC2 (t3.micro) — low-cost compute
-No NAT Gateway — major cost saving
-EC2 (t3.micro) — low-cost compute
-No NAT Gateway — major cost saving**
----
-## Production approach
-
-Add NAT Gateway per AZ for high availability
+**Tradeoff:**
+- Private subnets do not have outbound internet access  
+- Limits ability to install updates or pull dependencies from external sources  
 
 ---
-## Public EC2 Deployment
-EC2 instance deployed in a public subnet for simplicity.
+
+### Public EC2 Deployment
+
+The EC2 instance is deployed in a public subnet for simplicity and direct access.
+
+**Tradeoff:**
+- Easier to access and validate deployment  
+- Less secure compared to a private subnet + ALB architecture  
+
+**Production approach:**
+- Place EC2 instances in private subnets  
+- Use an Application Load Balancer for inbound traffic  
+- Restrict direct access to instances  
+
+---
+
+## Cost Considerations
+
+To minimise cost in this environment:
+
+- NAT Gateway is not provisioned (primary cost driver avoided)  
+- EC2 instance uses a low-cost instance type (t3.micro)  
+
+**Estimated impact:**
+- Significant cost reduction compared to NAT-enabled architecture  
+
+---
+
+## Production Approach
+
+In a production environment:
+
+- Deploy a NAT Gateway in each Availability Zone  
+- Configure private route tables to route `0.0.0.0/0` through the NAT Gateway  
+- Place application instances in private subnets  
+- Use an ALB for controlled public access  
+
 
 ---
 ## Screenshots
