@@ -117,10 +117,10 @@ All resources are automatically removed in the correct dependency order.
 ## Validation/Testing
 To verify successful deployment:
 
-Confirm VPC, subnets, and route tables in AWS Console
-Verify EC2 instance is running
-Access nginx via the public IP
-Re-run terraform apply to confirm idempotency
+- Confirm VPC, subnets, and route tables in AWS Console
+-  Verify EC2 instance is running
+-  Access nginx via the public IP
+-  Re-run terraform apply to confirm idempotency
 
 
 ---
@@ -226,7 +226,7 @@ aws-week5-terraform-infra/
 ```
 
 ## What I Learned
-Infrastructure can be defined and version-controlled like code
-Terraform enables consistent and repeatable deployments
-Design decisions involve tradeoffs between cost, security, and complexity
-Infrastructure lifecycle management is as important as deployment
+- Infrastructure can be defined and version-controlled like code
+- Terraform enables consistent and repeatable deployments
+- Design decisions involve tradeoffs between cost, security, and complexity
+- Infrastructure lifecycle management is as important as deployment
