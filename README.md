@@ -1,4 +1,4 @@
-# AWS Week 5 - Infrasturture as Code with Terraform
+# AWS Week 5 - Infrastructure as Code with Terraform
 
 ---
 ## Overview
